@@ -1,0 +1,30 @@
+app:
+  check-permission: true
+
+certificates:
+  # Source certificate zip package downloaded from cloud provider
+  source_zip_file_path: "./certificates.zip"
+  # Optional temp directory for extracting source and certificate zip files.
+  # Defaults to system temp directory when omitted.
+  temp_dir: "./tmp"
+
+  mappings:
+    # API service certificate
+    - zip_name: "api.example.com_nginx.zip"
+      target_file_dir: "./test/nginx/api-service"
+
+    # IP check service certificate
+    - zip_name: "ip.example.com_nginx.zip"
+      target_file_dir: "./test/nginx/ip-check"
+
+    # Main website certificate
+    - zip_name: "example.com_nginx.zip"
+      target_file_dir: "./test/nginx/main-site"
+
+    # Git service certificate
+    - zip_name: "git.example.com_nginx.zip"
+      target_file_dir: "./test/nginx/git-service"
+
+    # Proxy/NPS service certificate
+    - zip_name: "proxy.example.com_nginx.zip"
+      target_file_dir: "./test/nginx/proxy-service"
