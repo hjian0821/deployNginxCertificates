@@ -5,6 +5,9 @@ from config import read_config
 from deploy import process_certificates
 
 
+logger = logging.getLogger("main")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Deploy nginx certificate files from configured zip mappings."
@@ -32,7 +35,7 @@ def main() -> int:
         config = read_config(args.config)
         process_certificates(config)
     except Exception as e:
-        logging.error("Program exited: %s", e)
+        logger.error("Program exited: %s", e)
         return 1
 
     return 0
