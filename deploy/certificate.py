@@ -30,6 +30,9 @@ def process_certificates(config: AppConfig) -> None:
         logger.error(message)
         raise FileNotFoundError(message)
 
+    if not check_nginx_configuration():
+        raise RuntimeError("nginx configuration check failed")
+
     logger.info(
         "Start processing certificates: source_path=%s, temp_dir=%s, mappings=%d",
         source_path,
@@ -48,8 +51,8 @@ def process_certificates(config: AppConfig) -> None:
     if not check_certificate_permissions(target_dirs):
         raise RuntimeError("Certificate permission check failed")
 
-    if not check_nginx_and_restart():
-        raise RuntimeError("nginx check or restart failed")
+    if not restart_nginx():
+        raise RuntimeError("nginx restart failed")
 
     logger.info("All configured certificates processed")
 
@@ -125,7 +128,7 @@ def check_certificate_permissions(target_dirs: list[Path]) -> bool:
     return True
 
 
-def check_nginx_and_restart() -> bool:
+def check_nginx_configuration() -> bool:
     logger.info("Checking nginx configuration")
 
     try:
@@ -138,7 +141,12 @@ def check_nginx_and_restart() -> bool:
         logger.error("nginx config check failed: %s", result.stderr.strip())
         return False
 
-    logger.info("nginx config check passed, restarting service")
+    logger.info("nginx config check passed")
+    return True
+
+
+def restart_nginx() -> bool:
+    logger.info("Restarting nginx service")
     restart_result = subprocess.run(
         ["systemctl", "restart", "nginx"],
         capture_output=True,

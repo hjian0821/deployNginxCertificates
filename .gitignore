@@ -12,3 +12,4 @@ tmp/
 
 config.yaml
 *.zip
+.DS_Store
